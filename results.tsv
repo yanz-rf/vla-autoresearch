@@ -1,1 +1,2 @@
 tag	git_sha	pc_success	avg_sum_reward	train_s	eval_s	description
+baseline	5d7cd54	66.0	199.48	575	131	baseline ACT default hparams, 20k steps

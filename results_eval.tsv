@@ -1,0 +1,2 @@
+tag	git_sha	pc_success	avg_sum_reward	eval_s	description
+baseline_infer	5d7cd54	66.0	199.48	131	default inference: chunk=100, n_action_steps=100, no ensembling (from training-run eval)
