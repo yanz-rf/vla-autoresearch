@@ -17,6 +17,8 @@ methodological issue for autoresearch-style loops in robotics.
 
 ![Methods comparison](media/comparison.png)
 
+![Architecture comparison](media/architectures.png)
+
 ## How it works
 
 Same shape as karpathy's loop — the coding agent is the orchestrator:
