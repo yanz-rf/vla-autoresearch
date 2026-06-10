@@ -110,7 +110,7 @@
     <ul class="roomy">
       <li><b>Task</b> &mdash; ALOHA TransferCube (MuJoCo): right arm picks a cube, hands it to the left arm.</li>
       <li><b>Data</b> &mdash; 50 public human teleop demos (<code>lerobot/aloha_sim_transfer_cube_human</code>).</li>
-      <li><b>Policy</b> &mdash; ACT, 80M params: predicts 100-action chunks from camera + joint state
+      <li><b>Policy</b> &mdash; ACT, 52M params: predicts 100-action chunks from camera + joint state
           (from scratch; ImageNet-initialized ResNet-18 encoder).</li>
       <li><b>Score</b> &mdash; % of 50 fixed-seed episodes completed; staged reward (0-4) as dense secondary signal.</li>
       <li><b>Hackathon move</b> &mdash; train once (20k steps &asymp; 10 min, 66%), freeze weights, research
