@@ -16,9 +16,11 @@ source "$WS/.venv/bin/activate"
 export MUJOCO_GL=egl
 
 # ── Fixed experiment budget & eval protocol (do not change per-experiment) ──
-DATASET=lerobot/aloha_sim_transfer_cube_human
+# DATASET/ENV_TASK may be overridden via env vars to target a different
+# benchmark task (e.g. Insertion); budget and seeds stay fixed.
+DATASET=${DATASET:-lerobot/aloha_sim_transfer_cube_human}
 ENV_TYPE=aloha
-ENV_TASK=AlohaTransferCube-v0
+ENV_TASK=${ENV_TASK:-AlohaTransferCube-v0}
 TRAIN_STEPS=20000          # fixed compute budget for comparability
 EVAL_EPISODES=50           # enough to resolve ~10% differences in success
 EVAL_BATCH=10              # parallel sim envs
