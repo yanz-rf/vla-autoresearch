@@ -129,9 +129,10 @@ slides = [
       <li><b>New benchmark row (remote):</b> ACT on <b>ALOHA Insertion</b> (both arms must align a peg into a
           socket) at the same 20k budget: <b>18%</b> success &mdash; independently reproduces the original
           ACT paper's ~20% on human demos, and confirms Insertion as the high-headroom target for the loop.</li>
-      <li><b>Diagnosed &amp; fixed (local):</b> VQ-BeT's 2% traced to two config landmines &mdash; an 84&times;84
-          crop (2.3% of the ALOHA frame: the policy was nearly blind) and a two-phase schedule where our 20k
-          budget trained <i>only</i> the codebook, never the GPT policy head. Fix running under the same budget.</li>
+      <li><b>Diagnosed, fixed, still negative (local):</b> VQ-BeT's 2% traced to two config landmines &mdash; an 84&times;84
+          crop (2.3% of the ALOHA frame: nearly blind) and a two-phase schedule where the 20k budget trained
+          <i>only</i> the codebook. Fix: reward 0.5&rarr;20 (engages the task) but 0% success &mdash; residual
+          failure is structural (15-step horizon, 16-code vocab). Negative result, sharpened hypothesis.</li>
     </ul>
     """,
     # 10 ── learnings

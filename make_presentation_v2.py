@@ -136,9 +136,11 @@ slides = [
       <div class="card hl"><div class="ct">New benchmark row (remote)</div>
         ACT on <b>ALOHA Insertion</b> (peg-in-socket, both arms), same 20k budget: <b>18%</b> &mdash;
         independently reproduces the ACT paper's ~20%; confirms Insertion as the high-headroom target.</div>
-      <div class="card"><div class="ct">Diagnosed &amp; fixed (local)</div>
+      <div class="card"><div class="ct">Diagnosed, fixed, still negative (local)</div>
         VQ-BeT's 2% traced to an 84&times;84 crop (2.3% of the frame &mdash; nearly blind) and a two-phase schedule
-        where the whole 20k budget trained only the codebook, never the GPT head. Fix running, same budget.</div>
+        where the whole 20k budget trained only the codebook. Fix: reward 0.5&rarr;20 (now engages the task)
+        but <b>0% success</b> &mdash; residual failure is structural (15-step horizon, 16-code vocabulary).
+        A negative result with a sharpened hypothesis.</div>
     </div>
     """,
     # 12 ── learnings

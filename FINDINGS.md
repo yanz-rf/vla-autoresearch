@@ -58,6 +58,14 @@ VQ-BeT defaults were tuned on simpler benchmarks (PushT), so these are
 floor-not-ceiling numbers — tuning them is exactly the kind of work the loop
 automates. Diagrams: `media/architectures.png`, `media/bakeoff.png`.
 
+Follow-ups the loop chased:
+
+| follow-up | result | conclusion |
+|---|---|---|
+| `dp_40k` — DP at 2x budget | **62%** (+16) | DP was underfit at 20k; ACT wins *per unit compute*, DP scales with budget |
+| `vqbet_fixed` — remove 84x84 crop (2.3% of frame) + give the GPT head 15k of the 20k steps (default schedule spent all 20k on the VQ codebook) | **0%**, reward 0.5 → 19.9 | now engages the task but never completes: residual failure is structural (15-step horizon, 16-code vocabulary, discretization on 14-DoF precision) |
+| `act_insertion_20k` — harder Insertion task (run on a 2nd 5090 over Tailscale) | **18%** | independently reproduces the ACT paper's ~20% on human demos; confirms Insertion as the high-headroom target |
+
 ## Conclusions
 
 1. **Replan horizon is the dominant inference knob** and is non-monotonic:

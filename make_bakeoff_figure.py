@@ -15,6 +15,7 @@ MODELS = {
     "dp_20k": ("Diffusion Policy", "260M", "#7b3294"),
     "dp_40k": ("Diffusion Policy\n2x budget", "260M", "#9b59b6"),
     "vqbet_20k": ("VQ-BeT", "40M", "#d7191c"),
+    "vqbet_fixed": ("VQ-BeT\nfixed cfg", "40M", "#f46d43"),
 }
 
 rows = {}

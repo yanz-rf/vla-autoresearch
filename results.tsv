@@ -4,3 +4,4 @@ vqbet_20k	ae1a266	2.0	0.52	589	137	VQ-BeT, default config, 20k budget
 dp_20k	ae1a266	46.0	157.38	1202	167	Diffusion Policy, default config, 20k budget (rerun, diffusers installed)
 dp_40k	ae1a266	62.0	186.5	2378	167	Diffusion Policy, default config, 40k steps (2x budget: is DP underfit at 20k?)
 act_insertion_20k	796c069	18.0	170.36	620	142	ACT default on harder Insertion task, 20k budget (remote 5090)
+vqbet_fixed	ae1a266	0.0	19.92	1407	153	VQ-BeT fixed: full image (no 84x84 crop) + vqvae 5k steps so GPT gets 15k
