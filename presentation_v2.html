@@ -245,6 +245,39 @@
           2&times; steps &rarr; 62% (+16) &mdash; most of the gap was underfitting.</li>
     </ul>
     </section>
+<section class="slide" id="s16">
+    <h2>Bonus track &mdash; mini pi-0.6: learning from labeled failures</h2>
+    <ul class="roomy">
+      <li><b>RECAP / pi-0.6 idea:</b> don't discard failed rollouts &mdash; <i>label</i> them and let the
+          policy read the label at inference. We append a text-only context field
+          <code>Advantage: positive | negative</code> to the prompt (no architecture change).</li>
+      <li><b>Synthetic data:</b> a real LeRobot dataset (UR5 single-arm schema, 48 episodes / 1211 frames)
+          with per-frame advantage labels &mdash; clean starts emit a paired success (positive) and
+          corrupted (negative) episode from the <i>same</i> state; recovery starts begin in the failure zone.</li>
+      <li><b>Real model, not a stand-in:</b> LoRA-finetuned a production pi-0.5 UR5 checkpoint
+          (<code>gemma_2b_lora</code>, frozen backbone) on this data. Full finetune OOMs at ~53&nbsp;GB;
+          LoRA fits one 32&nbsp;GB 5090 at ~1.2&nbsp;s/it.</li>
+    </ul>
+    </section>
+<section class="slide" id="s17">
+    <h2>Result &mdash; the model learns to read the advantage label</h2>
+    <div class="statrow">
+      <div class="stat"><div class="n">16/16</div><div class="l">held-out frames where<br>actions shift with the label</div></div>
+      <div class="stat"><div class="n">0.0060</div><div class="l">mean action L2,<br>positive vs negative prompt</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">architecture changes<br>(text context only)</div></div>
+    </div>
+    <p class="center">Same held-out observation, same task &mdash; only the <code>Advantage</code> context differs.
+       We measure how far the trained model's predicted action chunk moves between the two prompts.</p>
+    <ul class="roomy" style="font-size:0.98em">
+      <li>A consistent non-zero shift on identical inputs &rarr; a <i>real</i> finetuned model is conditioning
+          its actions on the advantage label &mdash; the pi-0.6 mechanism, reproduced on synthetic data
+          (range 0.0031&ndash;0.0114 across 16 frames, pi-0.5 LoRA @ 1k steps).</li>
+      <li><b>Honest scope:</b> open-loop (action-divergence) evidence of the conditioning mechanism, not a
+          closed-loop sim success rate. Data is synthetic and the toy joint space is simpler than the real
+          robot, so the magnitude is modest. Artifacts: LeRobot generator + advantage transform (in openpi),
+          the trained LoRA checkpoint, eval script, and a side-by-side pick-and-place demo video.</li>
+    </ul>
+    </section>
 <div class="progress" id="bar"></div>
 <div class="pagenum" id="pg"></div>
 <script>
