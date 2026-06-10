@@ -1,2 +1,12 @@
 tag	git_sha	pc_success	avg_sum_reward	eval_s	description
 baseline_infer	5d7cd54	66.0	199.48	131	default inference: chunk=100, n_action_steps=100, no ensembling (from training-run eval)
+nas50	5d7cd54	80.0	215.02	133	execute only first 50 of 100-step chunk (replan 2x more often)
+nas25	5d7cd54	52.0	170.3	139	replan every 25 steps (4x more often than default)
+tens001	5d7cd54	64.0	193.92	156	ACT paper temporal ensembling, coeff=0.01 (predict every step, blend chunks)
+nas75	5d7cd54	64.0	191.5	138	replan every 75 steps (map the horizon curve)
+nas40	5d7cd54	72.0	204.34	138	replan every 40 steps
+xfade15_nas50	53df2fc	82.0	230.7	132	crossfade 15 steps at chunk boundary, nas=50
+xfade30_nas50	53df2fc	80.0	228.7	138	crossfade 30 steps at chunk boundary, nas=50
+xfade8_nas50	53df2fc	76.0	227.2	135	crossfade 8 steps, nas=50
+replan_dbg	ae1a266	82.0	230.14	133	replan-thresh instrumentation only (thresh=inf), collect tracking-err stats
+replan2_xf15	ae1a266	68.0	204.64	135	deviation-triggered replan, thresh=2.0 + xfade15, nas=50
