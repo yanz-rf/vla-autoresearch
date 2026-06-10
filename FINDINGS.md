@@ -44,6 +44,20 @@ rollout videos) are in `eval_runs_80k/`, machine-readable in `results_80k.tsv`.
   across both seed sets and in reward. The discoveries are genuine inference
   improvements, not compensation for undertraining.
 
+## Architecture bake-off (same 50 demos, same 20k-step budget, same eval)
+
+| model | params | success | reward | train time |
+|---|---:|---:|---:|---:|
+| ACT (default inference)   | 80M  | 66% | 199.5 | 9.6 min |
+| ACT (champion inference)  | 80M  | 82% | 230.7 | (same weights) |
+| Diffusion Policy          | 260M | 46% | 157.4 | 20 min |
+| VQ-BeT                    | 40M  | 2%  | 0.5   | 9.8 min |
+
+All with library-default configs. ACT's defaults are ALOHA-native; DP and
+VQ-BeT defaults were tuned on simpler benchmarks (PushT), so these are
+floor-not-ceiling numbers — tuning them is exactly the kind of work the loop
+automates. Diagrams: `media/architectures.png`, `media/bakeoff.png`.
+
 ## Conclusions
 
 1. **Replan horizon is the dominant inference knob** and is non-monotonic:

@@ -1,3 +1,4 @@
 tag	git_sha	pc_success	avg_sum_reward	train_s	eval_s	description
 baseline	5d7cd54	66.0	199.48	575	131	baseline ACT default hparams, 20k steps
 vqbet_20k	ae1a266	2.0	0.52	589	137	VQ-BeT, default config, 20k budget
+dp_20k	ae1a266	46.0	157.38	1202	167	Diffusion Policy, default config, 20k budget (rerun, diffusers installed)

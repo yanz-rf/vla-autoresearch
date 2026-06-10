@@ -73,7 +73,7 @@ arrow(c, 4.7, 4.25)
 box(c, 3.45, "1D conditional UNet\nstarts from pure NOISE, denoises the\naction sequence over ~100 steps\n(repeated forward passes)", "#e8daef", h=1.9)
 arrow(c, 2.5, 2.25, "denoising (DDPM) loss")
 box(c, 1.8, "64-step trajectory (execute 32)", "#d2b4de", bold=True)
-ax.text(c, 0.95, "generative: keeps multimodal demos\ndistinct | slowest inference (iterative)\nbake-off: running", ha="center", fontsize=8.5, color="#6c3483")
+ax.text(c, 0.95, "generative: keeps multimodal demos\ndistinct | slowest inference (iterative)\nbake-off: 46% (2x ACT train time)", ha="center", fontsize=8.5, color="#6c3483")
 
 # ── VQ-BeT column ──
 c = COLS["vqbet"]
