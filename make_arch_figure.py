@@ -42,7 +42,7 @@ def arrow(x, y1, y2, label=None):
 
 
 # ── column titles ──
-ax.text(COLS["act"], 9.45, "ACT  (80M)", ha="center", fontsize=13, fontweight="bold", color="#1a5276")
+ax.text(COLS["act"], 9.45, "ACT  (52M)", ha="center", fontsize=13, fontweight="bold", color="#1a5276")
 ax.text(COLS["act"], 9.05, "action chunking transformer — regression", ha="center", fontsize=9, style="italic")
 ax.text(COLS["dp"], 9.45, "Diffusion Policy  (260M)", ha="center", fontsize=13, fontweight="bold", color="#6c3483")
 ax.text(COLS["dp"], 9.05, "iterative denoising — generative", ha="center", fontsize=9, style="italic")

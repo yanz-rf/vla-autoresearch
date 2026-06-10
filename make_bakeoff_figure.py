@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 # tag -> (display name, params, color)
 MODELS = {
-    "baseline": ("ACT", "80M", "#2c7fb8"),
+    "baseline": ("ACT", "52M", "#2c7fb8"),
     "dp_20k": ("Diffusion Policy", "260M", "#7b3294"),
     "dp_40k": ("Diffusion Policy\n2x budget", "260M", "#9b59b6"),
     "vqbet_20k": ("VQ-BeT", "40M", "#d7191c"),
@@ -25,7 +25,7 @@ with open("results.tsv") as f:
             rows[r["tag"]] = r
 
 # Champion inference config on the same ACT weights (from results_eval.tsv).
-extra = [("ACT + champion\ninference", "80M", 82.0, 230.7, "#a6bddb")]
+extra = [("ACT + champion\ninference", "52M", 82.0, 230.7, "#a6bddb")]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 fig.suptitle(

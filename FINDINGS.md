@@ -48,8 +48,8 @@ rollout videos) are in `eval_runs_80k/`, machine-readable in `results_80k.tsv`.
 
 | model | params | success | reward | train time |
 |---|---:|---:|---:|---:|
-| ACT (default inference)   | 80M  | 66% | 199.5 | 9.6 min |
-| ACT (champion inference)  | 80M  | 82% | 230.7 | (same weights) |
+| ACT (default inference)   | 52M  | 66% | 199.5 | 9.6 min |
+| ACT (champion inference)  | 52M  | 82% | 230.7 | (same weights) |
 | Diffusion Policy          | 260M | 46% | 157.4 | 20 min |
 | VQ-BeT                    | 40M  | 2%  | 0.5   | 9.8 min |
 

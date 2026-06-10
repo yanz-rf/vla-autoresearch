@@ -59,7 +59,7 @@ slides = [
     <ul>
       <li><b>Task:</b> ALOHA TransferCube (MuJoCo, gym-aloha) &mdash; bimanual: right arm picks a cube, hands to left arm.</li>
       <li><b>Data:</b> 50 public human teleop demos (<code>lerobot/aloha_sim_transfer_cube_human</code>).</li>
-      <li><b>Policy:</b> ACT, 80M params &mdash; predicts 100-action chunks from camera + joint state.</li>
+      <li><b>Policy:</b> ACT, 52M params &mdash; predicts 100-action chunks from camera + joint state.</li>
       <li><b>Score:</b> % of 50 fixed-seed sim episodes fully completed; reward (0-4 staged progress) as dense secondary signal.</li>
       <li><b>Hackathon constraint:</b> trained once (20k steps, 10 min, 66%), then froze weights &mdash;
           all research on <i>inference-time</i> behavior at 2.5 min/experiment.</li>
