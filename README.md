@@ -9,7 +9,9 @@ policies where the scored metric is **closed-loop simulation success rate**
 ALOHA TransferCube (gym-aloha, MuJoCo), the loop found an inference-time
 configuration — replan every 50 of 100 predicted steps + a novel 15-step
 chunk-boundary crossfade — reaching **82% on dev seeds (~+10 pooled across
-seed sets)** in 11 experiments / ~30 min of compute. See [FINDINGS.md](FINDINGS.md),
+seed sets)** in 11 experiments / ~30 min of compute. On a fully-trained 80k-step
+model the same config holds up: **85% pooled vs 72% default (88% on held-out
+seeds)**. See [FINDINGS.md](FINDINGS.md),
 including the held-out-seed validation showing why eval noise is the central
 methodological issue for autoresearch-style loops in robotics.
 

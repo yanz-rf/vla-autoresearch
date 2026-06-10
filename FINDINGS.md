@@ -27,6 +27,22 @@ fixed-seed 50-episode sim eval (~2.5 min on an RTX 5090).
 - champion (nas50 + xfade15): **76%**
 - default inference:          **74%**
 
+## Post-hackathon: does it transfer to a fully-trained model? (80k steps)
+
+Retrained the same ACT config to 80k steps (~40 min on the 5090) and re-ran
+the comparison, 50 episodes per cell:
+
+| config                        | dev seeds (100000) | held-out (200000) | reward    |
+|-------------------------------|-------------------:|------------------:|-----------|
+| default inference             | 68%                | 76%               | 197 / 215 |
+| champion (replan-50 + xfade15)| **82%**            | **88%**           | 221 / 243 |
+
+- Training 4x longer barely moved default inference (~70% -> ~72% pooled):
+  the model converges early on 50 demos.
+- The inference-time gains fully transfer: pooled +13 (72% -> 85%), consistent
+  across both seed sets and in reward. The discoveries are genuine inference
+  improvements, not compensation for undertraining.
+
 ## Conclusions
 
 1. **Replan horizon is the dominant inference knob** and is non-monotonic:
