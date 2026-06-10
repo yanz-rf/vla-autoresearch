@@ -1,0 +1,5 @@
+config	seed_set	pc_success	avg_sum_reward	n_episodes	checkpoint	description
+default	100000	68.0	196.9	50	act_80k (seed 1000, 80k steps)	default inference: full 100-step chunk
+default	200000	76.0	215.08	50	act_80k (seed 1000, 80k steps)	default inference: full 100-step chunk
+champ	100000	82.0	221.06	50	act_80k (seed 1000, 80k steps)	champion: n_action_steps=50 + ACT_XFADE_STEPS=15
+champ	200000	88.0	243.16	50	act_80k (seed 1000, 80k steps)	champion: n_action_steps=50 + ACT_XFADE_STEPS=15

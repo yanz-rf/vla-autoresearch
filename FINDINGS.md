@@ -30,12 +30,13 @@ fixed-seed 50-episode sim eval (~2.5 min on an RTX 5090).
 ## Post-hackathon: does it transfer to a fully-trained model? (80k steps)
 
 Retrained the same ACT config to 80k steps (~40 min on the 5090) and re-ran
-the comparison, 50 episodes per cell:
+the comparison, 50 episodes per cell. Raw eval outputs (eval_info.json +
+rollout videos) are in `eval_runs_80k/`, machine-readable in `results_80k.tsv`.
 
-| config                        | dev seeds (100000) | held-out (200000) | reward    |
-|-------------------------------|-------------------:|------------------:|-----------|
-| default inference             | 68%                | 76%               | 197 / 215 |
-| champion (replan-50 + xfade15)| **82%**            | **88%**           | 221 / 243 |
+| config                        | dev seeds (100000) | held-out (200000) | reward (dev / held-out) |
+|-------------------------------|-------------------:|------------------:|------------------------:|
+| default inference             | 68%                | 76%               | 196.9 / 215.1 |
+| champion (replan-50 + xfade15)| **82%**            | **88%**           | **221.1 / 243.2** |
 
 - Training 4x longer barely moved default inference (~70% -> ~72% pooled):
   the model converges early on 50 demos.
@@ -65,6 +66,8 @@ the comparison, 50 episodes per cell:
 
 - Loop protocol: `program_hackathon.md`; scorer: `run_eval_experiment.sh`
   (read-only); log: `results_eval.tsv`; per-run videos in `eval_runs/*/videos/`.
+- 80k validation artifacts: `results_80k.tsv` + `eval_runs_80k/<config>_<seed>/`
+  (eval_info.json and rollout videos for all four cells).
 - Code experiments are commits in `../lerobot` (crossfade + replan-trigger,
   both env-var-gated, default-off).
 - Full-training loop variant (20k-step budget, ~12 min/exp): `run_experiment.sh`

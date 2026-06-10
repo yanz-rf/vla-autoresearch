@@ -53,5 +53,6 @@ import gym_aloha). `MUJOCO_GL=egl` for headless rendering.
 - `run_eval_experiment.sh`, `run_experiment.sh` — read-only scoring harnesses
 - `program_hackathon.md`, `program.md` — agent protocols (point Claude Code at one)
 - `results_eval.tsv`, `FINDINGS.md` — experiment log and writeup
+- `results_80k.tsv`, `eval_runs_80k/` — 80k-model validation (default vs champion, dev + held-out seeds)
 - `lerobot-patches/` — the code-level experiments (crossfade, deviation-replan)
 - `eval_runs/*/videos/` — closed-loop rollout videos for every experiment
