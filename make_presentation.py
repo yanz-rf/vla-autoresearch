@@ -127,6 +127,10 @@ slides = [
       <li><b>Agent-as-orchestrator works for robotics</b>: ~25 scored runs today, every claim traceable to
           a git commit + results row + videos.</li>
     </ol>
+    <p style="font-size:0.9em;color:#9fb2c8"><b>Appendix</b> &mdash;
+       A1: open-loop loss vs closed-loop success (mis)alignment data &middot;
+       A2: which inference smoothing fits which architecture &middot;
+       A3: why regression averages modes and diffusion doesn't</p>
     """,
     # 11 ── next
     """
@@ -139,6 +143,63 @@ slides = [
       <li><b>Overnight run:</b> the loop is built for it &mdash; ~100 train+eval experiments/night at 20k budget.</li>
     </ul>
     <p class="big" style="margin-top:1em"><code>github.com/yanz-rf/vla-autoresearch</code></p>
+    """,
+    # A1 ── open-loop vs closed-loop alignment
+    """
+    <h2>Appendix A1 &mdash; Open-loop loss vs closed-loop success: poor alignment</h2>
+    <table>
+      <tr><th>train step</th><th>open-loop L1 loss</th><th>closed-loop success (dev / held-out)</th></tr>
+      <tr><td>20k</td><td>~0.11</td><td>66% / 74%</td></tr>
+      <tr><td>80k</td><td>0.052 (2.3&times; better)</td><td>68% / 76% (statistical tie)</td></tr>
+    </table>
+    <ul style="font-size:1.05em">
+      <li><b>Evidence 1:</b> loss fell smoothly for 60k more steps; task success didn't move.
+          Past ~20k, gradients improved imitation of demo frames, not task completion.</li>
+      <li><b>Evidence 2 (sharper):</b> all our inference configs share frozen weights &rarr;
+          <i>identical</i> open-loop loss, yet closed-loop success ranged <b>52% &rarr; 82%</b>.
+          The whole dimension we mined for gains is invisible to open-loop eval by construction.</li>
+      <li><b>Why they decouple:</b> open-loop asks "predict the human's action in states the human visited";
+          closed-loop asks "recover in states your own mistakes created". Compounding error and execution
+          strategy live only in the second. Low loss is ~necessary, far from sufficient.</li>
+    </ul>
+    """,
+    # A2 ── smoothing × architecture
+    """
+    <h2>Appendix A2 &mdash; Which inference smoothing fits which architecture</h2>
+    <table style="font-size:0.95em">
+      <tr><th>policy type</th><th>output is...</th><th>safe smoothing</th><th>examples</th></tr>
+      <tr><td>regression (ACT)</td><td>point estimate (conditional mean)</td>
+          <td><b>averaging</b> in action space</td>
+          <td>temporal ensembling (ACT paper), our chunk crossfade</td></tr>
+      <tr><td>generative (DP, &pi;0, flow VLAs)</td><td>one sample from a multimodal distribution</td>
+          <td><b>conditioning or selection</b>, never sample-averaging</td>
+          <td>warm-start / inpainting: Real-Time Chunking (arXiv 2506.07339, in LeRobot);
+              selection: Bidirectional Decoding (arXiv 2408.17355)</td></tr>
+    </table>
+    <ul style="font-size:1.0em">
+      <li>Averaging two <i>samples</i> can blend two modes &rarr; the invalid in-between action generative models exist to avoid (BID shows ensembling degrades stochastic chunked policies).</li>
+      <li>Even within "averaging is safe": our ACT data shows heavy ensembling lags and hurts (64%) while a
+          short boundary-only crossfade helps (82%) &mdash; smooth the transition, not the whole plan.</li>
+      <li>Caveat: our task is near-unimodal, so crossfade <i>might</i> also help DP here &mdash; a 3-min loop experiment.</li>
+    </ul>
+    """,
+    # A3 ── mean vs mode
+    """
+    <h2>Appendix A3 &mdash; Why regression averages modes and diffusion doesn't</h2>
+    <ul style="font-size:1.05em">
+      <li><b>Regression:</b> L2/L1 training is minimized by the conditional mean/median. If demos contain
+          "grasp left" and "grasp right" for the same observation, the optimal single output is
+          <i>between them</i> &mdash; and the average of two valid actions is generally not a valid action.
+          (ACT's CVAE latent z mitigates this in training, but z=0 at inference collapses to one blend.)</li>
+      <li><b>Diffusion:</b> the denoising objective learns the <i>shape</i> of p(action | obs) (its score).
+          Sampling starts from noise that lands by chance nearer one mode; each denoising step is conditioned
+          on the current iterate, so it commits to that mode's basin &mdash; like a ball rolling into one of two
+          valleys. Output: a clean sample from one strategy, mush from none.</li>
+      <li><b>Why DP still lost our bake-off (46% vs 66%):</b> near-unimodal demos (its strength never engaged),
+          fixed 20k budget penalizes slow-converging diffusion training, PushT-tuned defaults,
+          and stochastic decoding noise at the precision handoff. Floor, not ceiling &mdash; dp_40k tests
+          the budget hypothesis.</li>
+    </ul>
     """,
 ]
 
