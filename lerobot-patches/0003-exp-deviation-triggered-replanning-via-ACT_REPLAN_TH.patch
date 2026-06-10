@@ -1,0 +1,54 @@
+From ae1a26640143635c9efa51098dad95cf0ad051c7 Mon Sep 17 00:00:00 2001
+From: Yan Z <yan.z@roboforce.ai>
+Date: Wed, 10 Jun 2026 12:27:50 -0700
+Subject: [PATCH 3/3] exp: deviation-triggered replanning via ACT_REPLAN_THRESH
+
+---
+ src/lerobot/policies/act/modeling_act.py | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/src/lerobot/policies/act/modeling_act.py b/src/lerobot/policies/act/modeling_act.py
+index 840dc17..ad50bde 100644
+--- a/src/lerobot/policies/act/modeling_act.py
++++ b/src/lerobot/policies/act/modeling_act.py
+@@ -113,6 +113,26 @@ class ACTPolicy(PreTrainedPolicy):
+             action = self.temporal_ensembler.update(actions)
+             return action
+ 
++        # Deviation-triggered replanning: if the observed state stopped tracking the
++        # last commanded action, the plan is stale -> flush the queue and replan now.
++        import os as _os
++
++        _thresh = float(_os.environ.get("ACT_REPLAN_THRESH", "0") or 0)
++        if _thresh > 0 and len(self._action_queue) > 0:
++            last_action = getattr(self, "_last_returned_action", None)
++            from lerobot.utils.constants import OBS_STATE
++
++            if last_action is not None and OBS_STATE in batch:
++                err = (batch[OBS_STATE] - last_action).abs().max()
++                if not hasattr(self, "_replan_dbg_n"):
++                    self._replan_dbg_n = 0
++                self._replan_dbg_n += 1
++                if self._replan_dbg_n % 100 == 0:
++                    print(f"[replan-dbg] max tracking err={err.item():.4f}", flush=True)
++                if err.item() > _thresh:
++                    self._action_queue.clear()
++                    self._prev_chunk_tail = None
++
+         # Action queue logic for n_action_steps > 1. When the action_queue is depleted, populate it by
+         # querying the policy.
+         if len(self._action_queue) == 0:
+@@ -139,7 +159,9 @@ class ACTPolicy(PreTrainedPolicy):
+             # `self.model.forward` returns a (batch_size, n_action_steps, action_dim) tensor, but the queue
+             # effectively has shape (n_action_steps, batch_size, *), hence the transpose.
+             self._action_queue.extend(actions.transpose(0, 1))
+-        return self._action_queue.popleft()
++        action = self._action_queue.popleft()
++        self._last_returned_action = action
++        return action
+ 
+     @torch.no_grad()
+     def predict_action_chunk(self, batch: dict[str, Tensor]) -> Tensor:
+-- 
+2.34.1
+

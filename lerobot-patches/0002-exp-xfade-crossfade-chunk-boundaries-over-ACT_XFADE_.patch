@@ -1,0 +1,52 @@
+From 53df2fc89d435612692138108dada6fa0774434a Mon Sep 17 00:00:00 2001
+From: Yan Z <yan.z@roboforce.ai>
+Date: Wed, 10 Jun 2026 12:19:56 -0700
+Subject: [PATCH 2/3] exp xfade: crossfade chunk boundaries over
+ ACT_XFADE_STEPS, nas=50
+
+---
+ src/lerobot/policies/act/modeling_act.py | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/src/lerobot/policies/act/modeling_act.py b/src/lerobot/policies/act/modeling_act.py
+index 5651fbf..840dc17 100644
+--- a/src/lerobot/policies/act/modeling_act.py
++++ b/src/lerobot/policies/act/modeling_act.py
+@@ -96,6 +96,7 @@ class ACTPolicy(PreTrainedPolicy):
+             self.temporal_ensembler.reset()
+         else:
+             self._action_queue = deque([], maxlen=self.config.n_action_steps)
++            self._prev_chunk_tail = None
+ 
+     @torch.no_grad()
+     def select_action(self, batch: dict[str, Tensor]) -> Tensor:
+@@ -115,7 +116,25 @@ class ACTPolicy(PreTrainedPolicy):
+         # Action queue logic for n_action_steps > 1. When the action_queue is depleted, populate it by
+         # querying the policy.
+         if len(self._action_queue) == 0:
+-            actions = self.predict_action_chunk(batch)[:, : self.config.n_action_steps]
++            import os
++
++            full_chunk = self.predict_action_chunk(batch)
++            n = self.config.n_action_steps
++            actions = full_chunk[:, :n]
++
++            # Crossfade with the previous chunk's overlapping tail to smooth the
++            # discontinuity at chunk boundaries (ACT_XFADE_STEPS=0 disables).
++            xfade = int(os.environ.get("ACT_XFADE_STEPS", "0"))
++            if xfade > 0:
++                prev_tail = getattr(self, "_prev_chunk_tail", None)
++                if prev_tail is not None:
++                    k = min(xfade, n, prev_tail.shape[1])
++                    alpha = torch.linspace(1.0 / k, 1.0, k, device=actions.device).view(1, k, 1)
++                    actions = actions.clone()
++                    actions[:, :k] = alpha * actions[:, :k] + (1 - alpha) * prev_tail[:, :k]
++                # The tail of this chunk covers the same future timesteps as the
++                # next chunk's first actions will.
++                self._prev_chunk_tail = full_chunk[:, n : 2 * n].clone()
+ 
+             # `self.model.forward` returns a (batch_size, n_action_steps, action_dim) tensor, but the queue
+             # effectively has shape (n_action_steps, batch_size, *), hence the transpose.
+-- 
+2.34.1
+
