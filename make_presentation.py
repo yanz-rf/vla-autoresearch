@@ -10,6 +10,7 @@ def b64(path, mime):
 
 
 comparison = b64("media/comparison.png", "image/png")
+inference = b64("media/inference_methods.png", "image/png")
 bakeoff = b64("media/bakeoff.png", "image/png")
 arch = b64("media/architectures.png", "image/png")
 vid_success = b64("eval_runs_80k/champ_200000/videos/aloha_0/eval_episode_5.mp4", "video/mp4")
@@ -74,7 +75,12 @@ slides = [
       <li><b>(c)</b> Champion config validated on held-out seeds and on a 4&times;-longer-trained model.</li>
     </ul>
     """,
-    # 6 ── videos
+    # 6 ── how the inference strategies work
+    f"""
+    <h2>How the execution strategies differ</h2>
+    <img src="{inference}" style="width:62%;background:#fff">
+    """,
+    # 7 ── videos
     f"""
     <h2>Closed-loop rollouts (champion config, held-out seeds)</h2>
     <div style="display:flex;gap:2em;justify-content:center">
