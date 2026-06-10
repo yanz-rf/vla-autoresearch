@@ -15,6 +15,8 @@ seeds)**. See [FINDINGS.md](FINDINGS.md),
 including the held-out-seed validation showing why eval noise is the central
 methodological issue for autoresearch-style loops in robotics.
 
+![Methods comparison](media/comparison.png)
+
 ## How it works
 
 Same shape as karpathy's loop — the coding agent is the orchestrator:
