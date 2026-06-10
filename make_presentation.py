@@ -116,8 +116,23 @@ slides = [
     f"""
     <h2>Bake-off results</h2>
     <img src="{bakeoff}" style="width:88%">
-    <p style="font-size:0.85em">DP/VQ-BeT use library defaults tuned on simpler benchmarks (floor, not ceiling) &mdash;
-    tuning them is the loop's natural next assignment. DP at 2&times; budget (40k steps): running now.</p>
+    <p style="font-size:0.85em">DP/VQ-BeT use library defaults tuned on simpler benchmarks (floor, not ceiling).
+    The loop already chased two follow-ups: <b>DP at 2&times; budget &rarr; 62%</b> (+16: it was underfit &mdash;
+    ACT wins <i>per unit compute</i>, DP scales with budget) and a diagnosed VQ-BeT config fix (running).</p>
+    """,
+    # 9b ── scatter + harder task
+    """
+    <h2>Scaling out: 2nd GPU over Tailscale + a harder task</h2>
+    <ul>
+      <li>Loop scales horizontally: bootstrapped a second RTX 5090 from the public repo in ~10 min
+          (clone &rarr; apply patches &rarr; uv install &rarr; run); results merge back as git rows.</li>
+      <li><b>New benchmark row (remote):</b> ACT on <b>ALOHA Insertion</b> (both arms must align a peg into a
+          socket) at the same 20k budget: <b>18%</b> success &mdash; independently reproduces the original
+          ACT paper's ~20% on human demos, and confirms Insertion as the high-headroom target for the loop.</li>
+      <li><b>Diagnosed &amp; fixed (local):</b> VQ-BeT's 2% traced to two config landmines &mdash; an 84&times;84
+          crop (2.3% of the ALOHA frame: the policy was nearly blind) and a two-phase schedule where our 20k
+          budget trained <i>only</i> the codebook, never the GPT policy head. Fix running under the same budget.</li>
+    </ul>
     """,
     # 10 ── learnings
     """
@@ -203,8 +218,8 @@ slides = [
           valleys. Output: a clean sample from one strategy, mush from none.</li>
       <li><b>Why DP still lost our bake-off (46% vs 66%):</b> near-unimodal demos (its strength never engaged),
           fixed 20k budget penalizes slow-converging diffusion training, PushT-tuned defaults,
-          and stochastic decoding noise at the precision handoff. Floor, not ceiling &mdash; dp_40k tests
-          the budget hypothesis.</li>
+          and stochastic decoding noise at the precision handoff. Budget hypothesis since <b>confirmed</b>:
+          2&times; steps &rarr; 62% (+16), most of the gap was underfitting.</li>
     </ul>
     """,
 ]
